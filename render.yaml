@@ -1,0 +1,86 @@
+databases:
+  - name: postgres
+    databaseName: platformid
+    user: polygonid
+    region: oregon
+
+services:
+  - type: web
+    name: wunwey-issuer-node
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: free
+    healthCheckPath: /status
+    envVars:
+      - key: ISSUER_SERVER_PORT
+        value: 10000
+      - key: ISSUER_SERVER_URL
+        fromService:
+          type: web
+          name: wunwey-issuer-node
+          property: host
+      - key: ISSUER_PUBLISH_KEY_PATH
+        value: pbkey
+      - key: ISSUER_ETHEREUM_TRANSFER_ACCOUNT_KEY_PATH
+        value: pbkey
+      - key: ISSUER_ONCHAIN_PUBLISH_STATE_FREQUENCY
+        value: 1m
+      - key: ISSUER_ONCHAIN_CHECK_STATUS_FREQUENCY
+        value: 1m
+      - key: ISSUER_DATABASE_URL
+        fromDatabase:
+          name: postgres
+          property: connectionString
+      - key: ISSUER_IPFS_GATEWAY_URL
+        value: https://ipfs.io
+      - key: ISSUER_LOG_LEVEL
+        value: "-4"
+      - key: ISSUER_LOG_MODE
+        value: "2"
+      - key: ISSUER_API_AUTH_USER
+        value: user-issuer
+      - key: ISSUER_API_AUTH_PASSWORD
+        value: password-issuer
+      - key: ISSUER_ENVIRONMENT
+        value: production
+      - key: ISSUER_ISSUER_NAME
+        value: Wunwey Issuer
+      - key: ISSUER_KMS_BJJ_PROVIDER
+        value: localstorage
+      - key: ISSUER_KMS_ETH_PROVIDER
+        value: localstorage
+      - key: ISSUER_KMS_PROVIDER_LOCAL_STORAGE_FILE_PATH
+        value: ./localstoragekeys
+      - key: ISSUER_PROVER_TIMEOUT
+        value: 600s
+      - key: ISSUER_CIRCUIT_PATH
+        value: ./pkg/credentials/circuits
+      - key: ISSUER_CACHE_PROVIDER
+        value: redis
+      - key: ISSUER_CACHE_URL
+        value: redis://redis:6379/1
+      - key: ISSUER_SCHEMA_CACHE
+        value: "false"
+      - key: ISSUER_MEDIA_TYPE_MANAGER_ENABLED
+        value: "true"
+      - key: ISSUER_RESOLVER_PATH
+        value: ./resolvers_settings.yaml
+      - key: ISSUER_UNIVERSAL_LINKS_BASE_URL
+        value: https://wallet.privado.id
+      - key: ISSUER_API_CORS_ENABLED
+        value: "true"
+      - key: ISSUER_API_CORS_ALLOW_ORIGINS
+        value: "*"
+      - key: ISSUER_API_CORS_ALLOW_METHODS
+        value: GET,POST,PUT,DELETE,OPTIONS
+      - key: ISSUER_API_CORS_ALLOW_HEADERS
+        value: Content-Type,Authorization,X-Requested-With
+      - key: ISSUER_PAYMENTS_SETTINGS_PATH
+        value: ./payment_settings.yaml
+
+  - type: redis
+    name: redis
+    region: oregon
+    plan: free
+    maxmemoryPolicy: allkeys-lru
