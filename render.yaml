@@ -59,7 +59,7 @@ services:
       - key: ISSUER_CACHE_PROVIDER
         value: redis
       - key: ISSUER_CACHE_URL
-        value: redis://redis:6379/1
+        value: redis://localhost:6379/1
       - key: ISSUER_SCHEMA_CACHE
         value: "false"
       - key: ISSUER_MEDIA_TYPE_MANAGER_ENABLED
@@ -78,9 +78,3 @@ services:
         value: Content-Type,Authorization,X-Requested-With
       - key: ISSUER_PAYMENTS_SETTINGS_PATH
         value: ./payment_settings.yaml
-
-  - type: redis
-    name: redis
-    region: oregon
-    plan: free
-    maxmemoryPolicy: allkeys-lru
