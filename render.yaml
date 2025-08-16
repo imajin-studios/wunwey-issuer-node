@@ -14,7 +14,7 @@ services:
     healthCheckPath: /status
     envVars:
       - key: ISSUER_SERVER_PORT
-        value: 10000
+        value: 8001
       - key: ISSUER_SERVER_URL
         fromService:
           type: web

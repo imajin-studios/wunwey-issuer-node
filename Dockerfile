@@ -2,7 +2,7 @@
 FROM privadoid/issuernode-api:latest
 
 # Install Redis
-RUN apt-get update && apt-get install -y redis-server && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add --no-cache redis
 
 # Copy configuration files
 COPY resolvers_settings.yaml /app/resolvers_settings.yaml
@@ -14,7 +14,7 @@ WORKDIR /app
 RUN echo "# Payment settings placeholder" > /app/payment_settings.yaml
 
 # Create startup script
-RUN echo '#!/bin/bash\nredis-server --daemonize yes\nexport ISSUER_SERVER_PORT=${PORT:-8001}\n./bin/platform_linux' > /app/start.sh && chmod +x /app/start.sh
+RUN echo '#!/bin/sh\nredis-server --daemonize yes\nexport ISSUER_SERVER_PORT=${PORT:-8001}\n/usr/local/bin/issuer-node' > /app/start.sh && chmod +x /app/start.sh
 
 # Expose the port
 EXPOSE 8001
