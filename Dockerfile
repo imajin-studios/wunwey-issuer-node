@@ -14,10 +14,10 @@ WORKDIR /app
 RUN echo "# Payment settings placeholder" > /app/payment_settings.yaml
 
 # Create startup script
-RUN echo '#!/bin/bash\nredis-server --daemonize yes\n./bin/platform_linux' > /app/start.sh && chmod +x /app/start.sh
+RUN echo '#!/bin/bash\nredis-server --daemonize yes\nexport ISSUER_SERVER_PORT=${PORT:-8001}\n./bin/platform_linux' > /app/start.sh && chmod +x /app/start.sh
 
 # Expose the port
-EXPOSE 10000
+EXPOSE 8001
 
 # Start Redis and the application
 CMD ["/app/start.sh"]

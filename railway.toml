@@ -1,0 +1,45 @@
+[build]
+builder = "dockerfile"
+
+[deploy]
+healthcheckPath = "/status"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+[[services]]
+name = "wunwey-issuer-node"
+
+[services.source]
+repo = "imajin-studios/wunwey-issuer-node"
+
+[[services.variables]]
+name = "ISSUER_SERVER_PORT"
+value = "8001"
+
+[[services.variables]]
+name = "ISSUER_SERVER_URL"
+value = "${{RAILWAY_PUBLIC_DOMAIN}}"
+
+[[services.variables]]
+name = "ISSUER_DATABASE_URL"
+value = "${{DATABASE_URL}}"
+
+[[services.variables]]
+name = "ISSUER_API_AUTH_USER"
+value = "user-issuer"
+
+[[services.variables]]
+name = "ISSUER_API_AUTH_PASSWORD"
+value = "password-issuer"
+
+[[services.variables]]
+name = "ISSUER_ENVIRONMENT"
+value = "production"
+
+[[services.variables]]
+name = "ISSUER_ISSUER_NAME"
+value = "Wunwey Issuer"
+
+[[services.variables]]
+name = "ISSUER_UNIVERSAL_LINKS_BASE_URL"
+value = "https://wallet.privado.id"
